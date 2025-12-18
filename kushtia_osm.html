@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kushtia Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 100vh; width: 100%; }
+        .info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: Arial;
+            box-shadow: 0 2.png);
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h2>Kushtia Map</h2>
+        <p>• Red: Hospitals<br>• Blue: You (Kushtia College)<br>• Click markers for details</p>
+    </div>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 1. Create map centered on Kushtia
+        const map = L.map('map').setView([23.90, 89.125], 14);
+        
+        // 2. Add OpenStreetMap tiles (free!)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 3. Real Kushtia hospitals
+        const hospitals = [
+            { name: "Kushtia General Hospital", lat: 23.9080, lng: 89.1180 },
+            { name: "Islamia Eye Hospital", lat: 23.9020, lng: 89.1210 },
+            { name: "Shishu Hospital", lat: 23.9050, lng: 89.1190 }
+        ];
+
+        // 4. Add hospital markers (red)
+        hospitals.forEach(hospital => {
+            L.marker([hospital.lat, hospital.lng])
+                .addTo(map)
+                .bindPopup(`<b>${hospital.name}</b>`)
+                .openPopup();
+        });
+
+        // 5. Your location (Coustom More - blue)
+        const myLocation = [23.896992, 89.112274];
+        L.marker(myLocation, { 
+            icon: L.divIcon({ 
+                className: 'custom-icon',
+                html: '<div style="background:blue;color:white;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-weight:bold">Aashiq</div>',
+                iconSize: [24, 24]
+            })
+        })
+        .addTo(map)
+        .bindPopup("<b>Coustom More</b><br>My Home")
+        .openPopup();
+    </script>
+</body>
+</html>
