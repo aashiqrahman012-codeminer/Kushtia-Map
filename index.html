@@ -41,8 +41,8 @@
     <div class="controls">
         <h3>Interactive Controls</h3>
         <button class="hospital-btn" onclick="showHospital('KGH')">Kushtia General Hospital</button>
-        <button class="hospital-btn" onclick="showHospital('IEH')"> Dar-Us Shefa Private Hospital </button>
-        <button class="hospital-btn" onclick="showHospital('SH')">Mental Hospital, Pabna</button>
+        <button class="hospital-btn" onclick="showHospital('DSPH')"> Dar-Us Shefa Private Hospital </button>
+        <button class="hospital-btn" onclick="showHospital('MHP')">Mental Hospital, Pabna</button>
         <button class="you-btn" onclick="showYou()">Show My Location</button>
         <p><b>Click any marker to see details!</b></p>
     </div>
@@ -62,8 +62,8 @@
         // 3. Real Kushtia hospitals (stored for easy access)
         const hospitals = {
             'KGH': { name: "Kushtia General Hospital", lat: 23.9012, lng: 89.1243, beds: 250 },
-            'IEH': { name: " Dar-Us Shefa Private Hospital ", lat:  23.90422 , lng: 89.11934, beds: 80 },
-            'SH': { name: "Mental Hospital, Pabna", lat: 24.0022, lng: 89.2062, beds: 120 }
+            'DSPH': { name: " Dar-Us Shefa Private Hospital ", lat:  23.90422 , lng: 89.11934, beds: 80 },
+            'MHP': { name: "Mental Hospital, Pabna", lat: 24.0022, lng: 89.2062, beds: 120 }
         };
 
         // 4. Create markers and store references 
@@ -79,7 +79,7 @@
                         <h3>${h.name}</h3>
                         <p><b>Beds:</b> ${h.beds}</p>
                         <p><b>Coordinates:</b> ${h.lat.toFixed(4)}, ${h.lng.toFixed(4)}</p>
-                        <p><b>Distance from College:</b> ${calculateDistance(23.896992, 89.112274, h.lat, h.lng).toFixed(2)} km</p>
+                        <p><b>Distance from Coustom More:</b> ${calculateDistance(23.896992, 89.112274, h.lat, h.lng).toFixed(2)} km</p>
                     </div>
                 `);
         });
@@ -89,7 +89,7 @@
         markers.you = L.marker(myLocation, { 
             icon: L.divIcon({ 
                 className: 'custom-icon',
-                html: '<div style="background:blue;color:white;width:30px;height:30px;border-radius:50%;text-align:center;line-height:30px;font-weight:bold;font-size:18px">Aashiq</div>',
+                html: '<div style="background:blue;color:white;width:30px;height:30px;border-radius:50%;text-align:center;line-height:30px;font-weight:bold;font-size:18px">AS</div>',
                 iconSize: [30, 30]
             })
         })
@@ -98,7 +98,6 @@
             <div style="min-width:200px">
                 <h3>Coustom More</h3>
                 <p><b>My House</b></p>
-                <p><b>Coordinates:</b> 23.896992, 89.112274</p>
                 <p><b>Role:</b> My living place</p>
             </div>
         `);
@@ -135,8 +134,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
