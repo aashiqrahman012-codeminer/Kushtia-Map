@@ -1,23 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Love</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Kushtia Map (OSM)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map { height: 85vh; width: 100%; border: 3px solid #2e7d32; border-radius: 8px; }
+        .controls {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: Arial;
+        }
+        .hospital-btn {
+            background: #e53935;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .hospital-btn:hover { background: #c62828; }
+        .you-btn { 
+            background: #1976d2; 
+            color: white; 
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .you-btn:hover { background: #0d47a1; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to the My Page</h1>
-    </header>
-    <main>
-        <p>This is the content of the My page.</p>
-    </main>
-    <footer>
-        <p>&copy; 2024 My Page</p>
-    </footer>
+    <h1>Kushtia Map OpenStreetMap)</h1>
+    
+    <div class="controls">
+        <h3>Interactive Controls</h3>
+        <button class="hospital-btn" onclick="showHospital('KGH')">Kushtia General Hospital</button>
+        <button class="hospital-btn" onclick="showHospital('IEH')">Islamia Eye Hospital</button>
+        <button class="hospital-btn" onclick="showHospital('SH')">Shishu Hospital</button>
+        <button class="you-btn" onclick="showYou()">Show My Location (Coustom More)</button>
+        <p><b>Click any marker to see details!</b></p>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 1. Create map centered on Kushtia
+        const map = L.map('map').setView([23.90, 89.125], 14);
+        
+        // 2. Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 3. Real Kushtia hospitals (stored for easy access)
+        const hospitals = {
+            'KGH': { name: "Kushtia General Hospital", lat: 23.9080, lng: 89.1180, beds: 250 },
+            'IEH': { name: "Islamia Eye Hospital", lat: 23.9020, lng: 89.1210, beds: 80 },
+            'SH': { name: "Shishu Hospital", lat: 23.9050, lng: 89.1190, beds: 120 }
+        };
+
+        // 4. Create markers and store references
+        const markers = {};
+        
+        // Add hospital markers
+        Object.keys(hospitals).forEach(key => {
+            const h = hospitals[key];
+            markers[key] = L.marker([h.lat, h.lng])
+                .addTo(map)
+                .bindPopup(`
+                    <div style="min-width:200px">
+                        <h3>${h.name}</h3>
+                        <p><b>Beds:</b> ${h.beds}</p>
+                        <p><b>Coordinates:</b> ${h.lat.toFixed(4)}, ${h.lng.toFixed(4)}</p>
+                        <p><b>Distance from College:</b> ${calculateDistance(23.896992, 89.112274, h.lat, h.lng).toFixed(2)} km</p>
+                    </div>
+                `);
+        });
+
+        // 5. Your location (Coustom More)
+        const myLocation = [23.896992, 89.112274];
+        markers.you = L.marker(myLocation, { 
+            icon: L.divIcon({ 
+                className: 'custom-icon',
+                html: '<div style="background:blue;color:white;width:30px;height:30px;border-radius:50%;text-align:center;line-height:30px;font-weight:bold;font-size:18px">Aashiq</div>',
+                iconSize: [30, 30]
+            })
+        })
+        .addTo(map)
+        .bindPopup(`
+            <div style="min-width:200px">
+                <h3>Coustom More</h3>
+                <p><b>My House</b></p>
+                <p><b>Coordinates:</b> 23.896992, 89.112274</p>
+                <p><b>Role:</b> My living place</p>
+            </div>
+        `);
+
+        // 6. Helper functions
+        function calculateDistance(lat1, lng1, lat2, lng2) {
+            // Simplified distance calculation (km)
+            const R = 6371; // Earth radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                     Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function showHospital(key) {
+            map.setView([hospitals[key].lat, hospitals[key].lng], 16);
+            markers[key].openPopup();
+        }
+
+        function showYou() {
+            map.setView(myLocation, 16);
+            markers.you.openPopup();
+        }
+
+        // 7. Add scale and locate controls
+        L.control.scale().addTo(map);
+        L.control.locate({ 
+            strings: { title: "Show me where I am" },
+            locateOptions: { maxZoom: 16 }
+        }).addTo(map);
+    </script>
 </body>
-
-
 </html>
