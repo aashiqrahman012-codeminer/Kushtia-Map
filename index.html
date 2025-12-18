@@ -36,14 +36,14 @@
     </style>
 </head>
 <body>
-    <h1>Kushtia Map - OpenStreetMap</h1>
+    <h1>Kushtia Map With OpenStreetMap</h1>
     
     <div class="controls">
         <h3>Interactive Controls</h3>
         <button class="hospital-btn" onclick="showHospital('KGH')">Kushtia General Hospital</button>
-        <button class="hospital-btn" onclick="showHospital('IEH')">Islamia Eye Hospital</button>
-        <button class="hospital-btn" onclick="showHospital('SH')">Shishu Hospital</button>
-        <button class="you-btn" onclick="showYou()">Show My Location (Coustom More)</button>
+        <button class="hospital-btn" onclick="showHospital('IEH')">The Rotary Club -Eye Hospital (Kushtia branch)</button>
+        <button class="hospital-btn" onclick="showHospital('SH')">Mental Hospital, Pabna</button>
+        <button class="you-btn" onclick="showYou()">Show My Location</button>
         <p><b>Click any marker to see details!</b></p>
     </div>
 
@@ -61,12 +61,12 @@
 
         // 3. Real Kushtia hospitals (stored for easy access)
         const hospitals = {
-            'KGH': { name: "Kushtia General Hospital", lat: 23.9080, lng: 89.1180, beds: 250 },
-            'IEH': { name: "Islamia Eye Hospital", lat: 23.9020, lng: 89.1210, beds: 80 },
-            'SH': { name: "Shishu Hospital", lat: 23.9050, lng: 89.1190, beds: 120 }
+            'KGH': { name: "Kushtia General Hospital", lat: 23.9012, lng: 89.1243, beds: 250 },
+            'IEH': { name: "The Rotary Club of Dhaka North Eye Hospital (Kushtia branch)", lat:  89.125, lng: 23.901, beds: 80 },
+            'SH': { name: "Mental Hospital, Pabna", lat: 24.0022, lng: 89.2062, beds: 120 }
         };
 
-        // 4. Create markers and store references
+        // 4. Create markers and store references 
         const markers = {};
         
         // Add hospital markers
@@ -135,4 +135,5 @@
     </script>
 </body>
 </html>
+
 
